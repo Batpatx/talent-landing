@@ -3,497 +3,182 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SYNAPTICOM — IA Builder</title>
-  <meta name="description" content="SYNAPTICOM busca un IA Builder Junior. No necesitas titulo. Necesitas mentalidad de builder." />
+  <title>SYNAPTICOM &mdash; IA Builder</title>
+  <meta name="description" content="SYNAPTICOM busca un IA Builder Junior. No necesit&aacute;s t&iacute;tulo. Necesit&aacute;s mentalidad de builder." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
-    /* ── TOKENS ──────────────────────────────────────── */
     :root {
-      --bg:       #0a0c10;
-      --surface:  #111318;
-      --card:     #171a21;
-      --border:   #1f2530;
-      --border-l: #2a3340;
-      --amber:    #0099FF;
-      --amber-l:  #33bbff;
-      --amber-d:  #0077cc;
-      --text:     #e8ecf2;
-      --sub:      #b0b8c4;
-      --muted:    #717d8a;
-      --dim:      #454f5c;
-      --red:      #e5534b;
-      --green:    #3fb950;
-      --font-d:   'Bricolage Grotesque', serif;
-      --font-b:   'Plus Jakarta Sans', sans-serif;
+      --bg:#0a0c10;--surface:#111318;--card:#171a21;--border:#1f2530;--border-l:#2a3340;
+      --accent:#0099FF;--accent-l:#33bbff;--accent-d:#0077cc;
+      --text:#e8ecf2;--sub:#b0b8c4;--muted:#717d8a;--dim:#454f5c;
+      --red:#e5534b;--green:#3fb950;
+      --font-d:'Bricolage Grotesque',serif;--font-b:'Plus Jakarta Sans',sans-serif;
     }
-    /* ── RESET ───────────────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--font-b);
-      font-size: 16px;
-      line-height: 1.65;
-      overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
-    }
-    ::selection { background: rgba(240,165,0,.25); }
-    a { color: var(--amber); text-decoration: none; }
-    img { display: block; max-width: 100%; }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+    body{background:var(--bg);color:var(--text);font-family:var(--font-b);font-size:16px;line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+    ::selection{background:rgba(0,153,255,.2)}
+    a{color:var(--accent);text-decoration:none}
 
-    /* ── GRAIN TEXTURE ───────────────────────────────── */
-    body::after {
-      content: '';
-      position: fixed; inset: 0;
-      pointer-events: none;
-      z-index: 9999;
-      opacity: .035;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      background-repeat: repeat;
-      background-size: 180px;
-    }
+    /* grain */
+    body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-repeat:repeat;background-size:180px}
 
-    /* ── SCROLL REVEAL ───────────────────────────────── */
-    .sr { opacity: 0; transform: translateY(28px); transition: opacity .65s cubic-bezier(.22,1,.36,1), transform .65s cubic-bezier(.22,1,.36,1); }
-    .sr.v { opacity: 1; transform: none; }
-    .sr-d1 { transition-delay: .08s; }
-    .sr-d2 { transition-delay: .16s; }
-    .sr-d3 { transition-delay: .24s; }
-    .sr-d4 { transition-delay: .32s; }
-    .sr-d5 { transition-delay: .40s; }
+    /* reveal */
+    .sr{opacity:0;transform:translateY(28px);transition:opacity .65s cubic-bezier(.22,1,.36,1),transform .65s cubic-bezier(.22,1,.36,1)}
+    .sr.v{opacity:1;transform:none}
+    .sr-d1{transition-delay:.08s}.sr-d2{transition-delay:.16s}.sr-d3{transition-delay:.24s}.sr-d4{transition-delay:.32s}
 
-    /* ── LAYOUT ──────────────────────────────────────── */
-    .wrap { width: 100%; max-width: 680px; margin: 0 auto; padding: 0 20px; }
-    section { padding: 64px 0; }
-    .sep { height: 1px; background: var(--border); margin: 0 20px; max-width: 680px; margin-left: auto; margin-right: auto; }
+    /* layout */
+    .wrap{width:100%;max-width:680px;margin:0 auto;padding:0 20px}
+    section{padding:56px 0}
+    .sep{height:1px;background:var(--border);margin:0 20px;max-width:680px;margin-left:auto;margin-right:auto}
+    .tag{display:inline-block;font-family:var(--font-b);font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
 
-    .tag {
-      display: inline-block;
-      font-family: var(--font-b);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 2.5px;
-      text-transform: uppercase;
-      color: var(--amber);
-      margin-bottom: 14px;
-    }
+    /* nav */
+    nav{position:sticky;top:0;z-index:200;background:rgba(10,12,16,.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.04);padding:14px 20px;display:flex;justify-content:space-between;align-items:center}
+    .logo{font-family:var(--font-d);font-weight:800;font-size:18px;color:var(--text);letter-spacing:-.5px}
+    .logo em{font-style:normal;color:var(--accent)}
+    .nav-btn{font-family:var(--font-b);font-weight:700;font-size:13px;background:var(--accent);color:var(--bg);padding:10px 22px;border-radius:100px;transition:transform .2s,box-shadow .2s}
+    .nav-btn:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(0,153,255,.3)}
 
-    /* ── NAV ─────────────────────────────────────────── */
-    nav {
-      position: sticky; top: 0; z-index: 200;
-      background: rgba(14,12,10,.88);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(255,255,255,.04);
-      padding: 14px 20px;
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .logo {
-      font-family: var(--font-d);
-      font-weight: 800;
-      font-size: 18px;
-      color: var(--text);
-      letter-spacing: -.5px;
-    }
-    .logo em { font-style: normal; color: var(--amber); }
-    .nav-btn {
-      font-family: var(--font-b);
-      font-weight: 700;
-      font-size: 13px;
-      background: var(--amber);
-      color: var(--bg);
-      padding: 10px 22px;
-      border-radius: 100px;
-      transition: transform .2s, box-shadow .2s;
-    }
-    .nav-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(240,165,0,.3); }
+    /* hero */
+    .hero{padding:72px 0 56px;text-align:center;position:relative}
+    .hero::before{content:'';position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:480px;height:480px;background:radial-gradient(circle,rgba(0,153,255,.06) 0%,transparent 65%);pointer-events:none}
+    .hero-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(0,153,255,.08);border:1px solid rgba(0,153,255,.18);padding:8px 18px;border-radius:100px;font-size:12px;font-weight:600;color:var(--accent);margin-bottom:24px}
+    .hero-pill .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:blink 2s infinite}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+    h1{font-family:var(--font-d);font-size:clamp(30px,8vw,54px);font-weight:800;line-height:1.08;letter-spacing:-1.5px;margin-bottom:20px;max-width:600px;margin-left:auto;margin-right:auto}
+    h1 .hl{color:var(--accent)}
+    .hero>div>p{color:var(--sub);font-size:17px;font-weight:300;max-width:440px;margin:0 auto 32px;line-height:1.7}
+    .hero-cta{display:inline-block;background:var(--accent);color:var(--bg);font-family:var(--font-d);font-weight:800;font-size:16px;padding:16px 44px;border-radius:100px;letter-spacing:-.2px;transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s}
+    .hero-cta:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 12px 40px rgba(0,153,255,.25)}
+    .hero-meta{margin-top:18px;display:flex;justify-content:center;gap:20px;flex-wrap:wrap;font-size:13px;color:var(--muted);font-weight:500}
+    .hero-meta span{display:flex;align-items:center;gap:6px}
+    .social-proof{margin-top:24px;font-size:13px;color:var(--dim);font-weight:500}
+    .social-proof b{color:var(--accent);font-weight:700}
 
-    /* ── HERO ────────────────────────────────────────── */
-    .hero { padding: 80px 0 64px; text-align: center; position: relative; }
-    .hero::before {
-      content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%);
-      width: 480px; height: 480px;
-      background: radial-gradient(circle, rgba(240,165,0,.07) 0%, transparent 65%);
-      pointer-events: none;
-    }
-    .hero-pill {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: rgba(240,165,0,.08);
-      border: 1px solid rgba(240,165,0,.18);
-      padding: 8px 18px;
-      border-radius: 100px;
-      font-size: 12px; font-weight: 600;
-      color: var(--amber);
-      margin-bottom: 28px;
-    }
-    .hero-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--amber); animation: blink 2s infinite; }
-    @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:.25; } }
-    h1 {
-      font-family: var(--font-d);
-      font-size: clamp(30px, 8vw, 54px);
-      font-weight: 800;
-      line-height: 1.08;
-      letter-spacing: -1.5px;
-      margin-bottom: 22px;
-      max-width: 600px;
-      margin-left: auto; margin-right: auto;
-    }
-    h1 .hl { color: var(--amber); }
-    .hero p {
-      color: var(--sub);
-      font-size: 17px;
-      font-weight: 300;
-      max-width: 440px;
-      margin: 0 auto 36px;
-      line-height: 1.7;
-    }
-    .hero-cta {
-      display: inline-block;
-      background: var(--amber);
-      color: var(--bg);
-      font-family: var(--font-d);
-      font-weight: 800;
-      font-size: 16px;
-      padding: 16px 44px;
-      border-radius: 100px;
-      letter-spacing: -.2px;
-      transition: transform .25s cubic-bezier(.22,1,.36,1), box-shadow .25s;
-    }
-    .hero-cta:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 12px 40px rgba(240,165,0,.25); }
-    .hero-meta {
-      margin-top: 22px;
-      display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;
-      font-size: 13px; color: var(--muted); font-weight: 500;
-    }
-    .hero-meta span { display: flex; align-items: center; gap: 6px; }
-    .hero-meta .ico { font-size: 14px; }
+    /* headings */
+    h2{font-family:var(--font-d);font-size:clamp(24px,6vw,36px);font-weight:800;letter-spacing:-1px;line-height:1.12;margin-bottom:16px}
+    h2 .hl{color:var(--accent)}
+    .intro{color:var(--sub);font-size:15px;font-weight:300;margin-bottom:28px;line-height:1.7;max-width:540px}
 
-    /* ── HEADINGS ────────────────────────────────────── */
-    h2 {
-      font-family: var(--font-d);
-      font-size: clamp(24px, 6vw, 36px);
-      font-weight: 800;
-      letter-spacing: -1px;
-      line-height: 1.12;
-      margin-bottom: 16px;
-    }
-    h2 .hl { color: var(--amber); }
-    .intro { color: var(--sub); font-size: 15px; font-weight: 300; margin-bottom: 28px; line-height: 1.7; max-width: 540px; }
+    /* pull quote */
+    .pull{padding:40px 20px;text-align:center;max-width:680px;margin:0 auto}
+    .pull q{font-family:var(--font-d);font-size:clamp(20px,5vw,28px);font-weight:700;line-height:1.3;color:var(--sub);letter-spacing:-.5px}
+    .pull q .hl{color:var(--accent)}
 
-    /* ── PULL QUOTE ──────────────────────────────────── */
-    .pull {
-      padding: 48px 20px;
-      text-align: center;
-      max-width: 680px;
-      margin: 0 auto;
-    }
-    .pull q {
-      font-family: var(--font-d);
-      font-size: clamp(20px, 5vw, 28px);
-      font-weight: 700;
-      line-height: 1.3;
-      color: var(--sub);
-      letter-spacing: -.5px;
-    }
-    .pull q .hl { color: var(--amber); }
+    /* lists */
+    .items{list-style:none}
+    .items li{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:15px;line-height:1.6;color:var(--sub)}
+    .items li:last-child{border-bottom:none}
+    .items .mk{flex-shrink:0;width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;margin-top:1px}
+    .mk-accent{background:rgba(0,153,255,.1);color:var(--accent)}
+    .mk-red{background:rgba(229,83,75,.1);color:var(--red)}
+    .mk-green{background:rgba(63,185,80,.1);color:var(--green)}
+    .note{margin-top:24px;padding:16px 18px;background:var(--surface);border-radius:10px;border:1px solid var(--border);font-size:13px;color:var(--muted);line-height:1.6}
 
-    /* ── LIST ITEMS ──────────────────────────────────── */
-    .items { list-style: none; }
-    .items li {
-      display: flex; gap: 14px; align-items: flex-start;
-      padding: 16px 0;
-      border-bottom: 1px solid rgba(255,255,255,.04);
-      font-size: 15px;
-      line-height: 1.6;
-      color: var(--sub);
-    }
-    .items li:last-child { border-bottom: none; }
-    .items .mk {
-      flex-shrink: 0;
-      width: 28px; height: 28px;
-      border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 13px; font-weight: 800;
-      margin-top: 1px;
-    }
-    .mk-amber { background: rgba(240,165,0,.1); color: var(--amber); }
-    .mk-red   { background: rgba(229,83,75,.1);  color: var(--red); }
-    .mk-green { background: rgba(63,185,80,.1);  color: var(--green); }
+    /* chips */
+    .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}
+    .chip{font-size:12px;font-weight:600;padding:8px 16px;border-radius:100px;background:var(--surface);border:1px solid var(--border);color:var(--sub);transition:border-color .2s}
+    .chip:hover{border-color:var(--accent-d)}
 
-    .note {
-      margin-top: 24px;
-      padding: 16px 18px;
-      background: var(--surface);
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      font-size: 13px;
-      color: var(--muted);
-      line-height: 1.6;
-    }
+    /* cards */
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:28px}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px 20px;transition:border-color .3s,transform .3s}
+    .card:hover{border-color:rgba(0,153,255,.2);transform:translateY(-2px)}
+    .card-ico{font-size:26px;margin-bottom:12px;display:block}
+    .card-t{font-family:var(--font-d);font-size:15px;font-weight:700;margin-bottom:6px}
+    .card-d{font-size:13px;color:var(--muted);line-height:1.55}
+    @media(max-width:400px){.grid{grid-template-columns:1fr}}
 
-    /* ── CHIPS ───────────────────────────────────────── */
-    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
-    .chip {
-      font-size: 12px; font-weight: 600;
-      padding: 8px 16px;
-      border-radius: 100px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      color: var(--sub);
-      transition: border-color .2s;
-    }
-    .chip:hover { border-color: var(--amber-d); }
+    /* steps */
+    .steps{margin-top:28px}
+    .stp{display:flex;gap:18px;margin-bottom:24px;position:relative}
+    .stp:not(:last-child)::after{content:'';position:absolute;left:16px;top:42px;bottom:-4px;width:1px;background:var(--border)}
+    .stp-n{width:34px;height:34px;flex-shrink:0;border-radius:10px;background:rgba(0,153,255,.1);border:1px solid rgba(0,153,255,.2);color:var(--accent);font-family:var(--font-d);font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center}
+    .stp h3{font-family:var(--font-d);font-size:16px;font-weight:700;margin-bottom:4px}
+    .stp p{font-size:14px;color:var(--muted);line-height:1.6}
 
-    /* ── CARDS ───────────────────────────────────────── */
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 28px; }
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 24px 20px;
-      transition: border-color .3s, transform .3s;
-    }
-    .card:hover { border-color: rgba(240,165,0,.2); transform: translateY(-2px); }
-    .card-ico { font-size: 26px; margin-bottom: 12px; display: block; }
-    .card-t { font-family: var(--font-d); font-size: 15px; font-weight: 700; margin-bottom: 6px; }
-    .card-d { font-size: 13px; color: var(--muted); line-height: 1.55; }
-    @media (max-width: 400px) { .grid { grid-template-columns: 1fr; } }
+    /* ══════ FORM ══════ */
+    #form-zone{background:var(--surface);border-top:1px solid var(--border)}
+    .form-w{max-width:600px;margin:0 auto;padding:64px 20px 80px}
+    .form-hdr{text-align:center;margin-bottom:36px}
+    .form-hdr p{color:var(--muted);font-size:14px;margin-top:10px}
+    .pills{display:flex;justify-content:center;gap:6px;margin-bottom:36px}
+    .pill{height:4px;border-radius:2px;background:var(--border);transition:all .35s cubic-bezier(.22,1,.36,1);flex:1;max-width:52px}
+    .pill.on{background:var(--accent)}.pill.done{background:rgba(0,153,255,.35)}
+    .step-label{text-align:center;font-size:12px;font-weight:600;color:var(--dim);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:28px}
+    .fs{display:none;animation:fadeUp .35s cubic-bezier(.22,1,.36,1)}.fs.on{display:block}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+    .fld{margin-bottom:24px}
+    .fld label{display:block;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--dim);margin-bottom:8px}
+    .fld .q{font-family:var(--font-d);font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px;line-height:1.4}
+    .fld .ht{font-size:13px;color:var(--muted);margin-bottom:10px;line-height:1.5;opacity:.85}
+    .fld input,.fld textarea{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--font-b);font-size:15px;padding:14px 16px;border-radius:10px;transition:border-color .2s,box-shadow .2s;resize:vertical;appearance:none;-webkit-appearance:none}
+    .fld input:focus,.fld textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,153,255,.1)}
+    .fld textarea{min-height:130px;line-height:1.6}.fld textarea.lg{min-height:190px}
+    .fld-err{border-color:var(--red)!important;box-shadow:0 0 0 3px rgba(229,83,75,.08)!important}
+    .fld-msg{font-size:12px;color:var(--red);margin-top:5px;display:none;font-weight:500}
+    .char-count{font-size:11px;color:var(--dim);margin-top:4px;text-align:right;transition:color .2s}
+    .char-count.ok{color:var(--green)}
+    .g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    @media(max-width:480px){.g2{grid-template-columns:1fr}}
+    .ex-box{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:12px}
+    .ex-box p{font-size:14px;color:var(--muted);line-height:1.7}
+    .ex-box strong{color:var(--accent);font-weight:700}
+    .step-motivator{text-align:center;padding:12px 16px;background:rgba(0,153,255,.06);border:1px solid rgba(0,153,255,.12);border-radius:10px;margin-bottom:24px;font-size:14px;color:var(--accent);font-weight:600}
+    .fnav{display:flex;justify-content:space-between;align-items:center;margin-top:32px;padding-top:20px;border-top:1px solid rgba(255,255,255,.04)}
+    .btn-back{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:var(--font-b);font-weight:600;font-size:14px;padding:12px 24px;border-radius:100px;cursor:pointer;transition:border-color .2s,color .2s}
+    .btn-back:hover{border-color:var(--sub);color:var(--sub)}
+    .btn-fwd,.btn-go{background:var(--accent);color:var(--bg);border:none;font-family:var(--font-d);font-weight:800;font-size:15px;padding:14px 32px;border-radius:100px;cursor:pointer;transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s;letter-spacing:-.2px}
+    .btn-fwd:hover,.btn-go:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 6px 24px rgba(0,153,255,.3)}
+    .btn-go:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none}
+    .btn-hide{visibility:hidden}
+    .submit-ft{text-align:center;margin-top:14px;font-size:12px;color:var(--dim)}
+    #ok-msg{display:none;text-align:center;padding:40px 0}
+    #ok-msg .ok-ring{width:64px;height:64px;border-radius:50%;background:rgba(63,185,80,.1);border:2px solid var(--green);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:28px;color:var(--green);animation:pop .4s cubic-bezier(.22,1,.36,1)}
+    @keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+    #ok-msg h2{margin-bottom:12px}
+    #ok-msg p{color:var(--muted);font-size:15px;max-width:420px;margin:0 auto;line-height:1.7}
+    #err-msg{display:none;background:rgba(229,83,75,.08);border:1px solid rgba(229,83,75,.2);color:#f0908a;padding:12px 16px;border-radius:10px;margin-top:14px;font-size:13px;text-align:center}
 
-    /* ── STEPS ───────────────────────────────────────── */
-    .steps { margin-top: 28px; }
-    .stp {
-      display: flex; gap: 18px; margin-bottom: 28px;
-      position: relative;
-    }
-    .stp:not(:last-child)::after {
-      content: '';
-      position: absolute;
-      left: 16px; top: 42px; bottom: -6px;
-      width: 1px;
-      background: var(--border);
-    }
-    .stp-n {
-      width: 34px; height: 34px; flex-shrink: 0;
-      border-radius: 10px;
-      background: rgba(240,165,0,.1);
-      border: 1px solid rgba(240,165,0,.2);
-      color: var(--amber);
-      font-family: var(--font-d);
-      font-weight: 800;
-      font-size: 14px;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .stp h3 { font-family: var(--font-d); font-size: 16px; font-weight: 700; margin-bottom: 4px; }
-    .stp p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+    /* toast */
+    .toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-80px);background:var(--accent);color:var(--bg);font-family:var(--font-d);font-weight:800;font-size:14px;padding:12px 28px;border-radius:100px;z-index:300;opacity:0;transition:all .4s cubic-bezier(.22,1,.36,1);pointer-events:none;white-space:nowrap}
+    .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
 
-    /* ══════════════════════════════════════════════════
-       FORM
-    ══════════════════════════════════════════════════ */
-    #form-zone { background: var(--surface); border-top: 1px solid var(--border); }
-    .form-w { max-width: 600px; margin: 0 auto; padding: 64px 20px 80px; }
-    .form-hdr { text-align: center; margin-bottom: 36px; }
-    .form-hdr p { color: var(--muted); font-size: 14px; margin-top: 10px; }
+    /* mobile cta — ONLY mobile */
+    .mobile-cta{display:none;position:fixed;bottom:0;left:0;right:0;padding:12px 20px calc(12px + env(safe-area-inset-bottom));background:rgba(10,12,16,.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid var(--border);z-index:150;text-align:center}
+    .mobile-cta a{display:block;background:var(--accent);color:var(--bg);font-family:var(--font-d);font-weight:800;font-size:15px;padding:14px;border-radius:100px}
 
-    /* progress pills */
-    .pills { display: flex; justify-content: center; gap: 6px; margin-bottom: 36px; }
-    .pill {
-      height: 4px; border-radius: 2px;
-      background: var(--border);
-      transition: all .35s cubic-bezier(.22,1,.36,1);
-      flex: 1; max-width: 52px;
-    }
-    .pill.on { background: var(--amber); }
-    .pill.done { background: rgba(240,165,0,.35); }
+    footer{border-top:1px solid var(--border);padding:24px 20px;text-align:center;font-size:12px;color:var(--dim)}
 
-    .step-label {
-      text-align: center;
-      font-size: 12px; font-weight: 600;
-      color: var(--dim);
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      margin-bottom: 28px;
+    @media(max-width:640px){
+      .mobile-cta.visible{display:block}
+      body{padding-bottom:72px}
+      section{padding:44px 0}
+      .hero{padding:52px 0 44px}
+      h1{font-size:28px;letter-spacing:-1px}
+      h2{font-size:24px}
+      .hero>div>p{font-size:15px}
+      .hero-cta{display:none}
+      .form-w{padding:48px 20px 80px}
     }
-
-    /* form step */
-    .fs { display: none; animation: fadeUp .35s cubic-bezier(.22,1,.36,1); }
-    .fs.on { display: block; }
-    @keyframes fadeUp { from { opacity:0; transform: translateY(14px); } to { opacity:1; transform:none; } }
-
-    /* fields */
-    .fld { margin-bottom: 24px; }
-    .fld label {
-      display: block;
-      font-size: 11px; font-weight: 700;
-      letter-spacing: 1.5px; text-transform: uppercase;
-      color: var(--dim);
-      margin-bottom: 8px;
-    }
-    .fld .q {
-      font-family: var(--font-d);
-      font-size: 16px; font-weight: 700;
-      color: var(--text);
-      margin-bottom: 6px;
-      line-height: 1.4;
-    }
-    .fld .ht { font-size: 13px; color: var(--muted); margin-bottom: 10px; line-height: 1.5; opacity: .85; }
-    .fld input, .fld textarea {
-      width: 100%;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      color: var(--text);
-      font-family: var(--font-b);
-      font-size: 15px;
-      padding: 14px 16px;
-      border-radius: 10px;
-      transition: border-color .2s, box-shadow .2s;
-      resize: vertical;
-      appearance: none;
-      -webkit-appearance: none;
-    }
-    .fld input:focus, .fld textarea:focus {
-      outline: none;
-      border-color: var(--amber);
-      box-shadow: 0 0 0 3px rgba(240,165,0,.1);
-    }
-    .fld textarea { min-height: 130px; line-height: 1.6; }
-    .fld textarea.lg { min-height: 190px; }
-    .fld-err { border-color: var(--red) !important; box-shadow: 0 0 0 3px rgba(229,83,75,.08) !important; }
-    .fld-msg { font-size: 12px; color: var(--red); margin-top: 5px; display: none; font-weight: 500; }
-    .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    @media (max-width: 480px) { .g2 { grid-template-columns: 1fr; } }
-
-    .ex-box {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 12px;
-    }
-    .ex-box p { font-size: 14px; color: var(--muted); line-height: 1.7; }
-    .ex-box strong { color: var(--amber); font-weight: 700; }
-
-    /* form nav */
-    .fnav {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-top: 32px; padding-top: 20px;
-      border-top: 1px solid rgba(255,255,255,.04);
-    }
-    .btn-back {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--muted);
-      font-family: var(--font-b);
-      font-weight: 600; font-size: 14px;
-      padding: 12px 24px;
-      border-radius: 100px;
-      cursor: pointer;
-      transition: border-color .2s, color .2s;
-    }
-    .btn-back:hover { border-color: var(--sub); color: var(--sub); }
-    .btn-fwd, .btn-go {
-      background: var(--amber);
-      color: var(--bg);
-      border: none;
-      font-family: var(--font-d);
-      font-weight: 800; font-size: 15px;
-      padding: 14px 32px;
-      border-radius: 100px;
-      cursor: pointer;
-      transition: transform .25s cubic-bezier(.22,1,.36,1), box-shadow .25s;
-      letter-spacing: -.2px;
-    }
-    .btn-fwd:hover, .btn-go:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(240,165,0,.3); }
-    .btn-go:disabled { opacity: .35; cursor: not-allowed; transform: none; box-shadow: none; }
-    .btn-hide { visibility: hidden; }
-    .submit-ft { text-align: center; margin-top: 14px; font-size: 12px; color: var(--dim); }
-
-    /* states */
-    #ok-msg { display: none; text-align: center; padding: 40px 0; }
-    #ok-msg .ok-ring {
-      width: 64px; height: 64px; border-radius: 50%;
-      background: rgba(63,185,80,.1); border: 2px solid var(--green);
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 24px;
-      font-size: 28px; color: var(--green);
-      animation: pop .4s cubic-bezier(.22,1,.36,1);
-    }
-    @keyframes pop { from { transform: scale(0); } to { transform: scale(1); } }
-    #ok-msg h2 { margin-bottom: 12px; }
-    #ok-msg p { color: var(--muted); font-size: 15px; max-width: 420px; margin: 0 auto; line-height: 1.7; }
-    #err-msg {
-      display: none;
-      background: rgba(229,83,75,.08);
-      border: 1px solid rgba(229,83,75,.2);
-      color: #f0908a;
-      padding: 12px 16px;
-      border-radius: 10px;
-      margin-top: 14px;
-      font-size: 13px;
-      text-align: center;
-    }
-
-    /* ── MOBILE STICKY CTA ───────────────────────────── */
-    .mobile-cta {
-      display: none;
-      position: fixed; bottom: 0; left: 0; right: 0;
-      padding: 12px 20px calc(12px + env(safe-area-inset-bottom));
-      background: rgba(14,12,10,.94);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-top: 1px solid var(--border);
-      z-index: 150;
-      text-align: center;
-    }
-    .mobile-cta a {
-      display: block;
-      background: var(--amber);
-      color: var(--bg);
-      font-family: var(--font-d);
-      font-weight: 800;
-      font-size: 15px;
-      padding: 14px;
-      border-radius: 100px;
-    }
-
-    /* ── FOOTER ──────────────────────────────────────── */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 24px 20px;
-      text-align: center;
-      font-size: 12px; color: var(--dim);
-    }
-
-    /* ── RESPONSIVE ──────────────────────────────────── */
-    @media (max-width: 640px) {
-      .mobile-cta { display: block; }
-      body { padding-bottom: 72px; }
-      section { padding: 48px 0; }
-      .hero { padding: 56px 0 48px; }
-      h1 { font-size: 28px; letter-spacing: -1px; }
-      h2 { font-size: 24px; }
-      .hero p { font-size: 15px; }
-      .hero-cta { display: none; }
-      .form-w { padding: 48px 20px 80px; }
-    }
-    @media (min-width: 641px) {
-      .wrap { padding: 0 32px; }
-      section { padding: 80px 0; }
-      nav { padding: 16px 32px; }
-      .form-w { padding: 80px 32px; }
-    }
+    @media(min-width:641px){.wrap{padding:0 32px}section{padding:72px 0}nav{padding:16px 32px}.form-w{padding:80px 32px}}
   </style>
 </head>
 <body>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
 
 <nav>
   <div class="logo">SYNAPTI<em>COM</em></div>
   <a href="#apply" class="nav-btn">Aplicar</a>
 </nav>
 
-<!-- ── HERO ────────────────────────────────────────── -->
+<!-- HERO -->
 <section class="hero">
   <div class="wrap">
     <div class="hero-pill sr"><span class="dot"></span> Posici&oacute;n abierta &mdash; LATAM</div>
@@ -501,26 +186,27 @@
     <p class="sr sr-d2">Alguien que use IA todos los d&iacute;as, que construya cosas por su cuenta y que quiera crecer r&aacute;pido dentro de un proyecto que ya est&aacute; en marcha.</p>
     <a href="#apply" class="hero-cta sr sr-d3">Quiero aplicar</a>
     <div class="hero-meta sr sr-d4">
-      <span><span class="ico">&#9201;</span> 15-20 min</span>
-      <span><span class="ico">&#127758;</span> 100% remoto</span>
-      <span><span class="ico">&#127891;</span> Sin titulo</span>
+      <span>&#9201; 15-20 min</span>
+      <span>&#127758; 100% remoto</span>
+      <span>&#127891; Sin t&iacute;tulo</span>
     </div>
+    <div class="social-proof sr sr-d4">Ya aplicaron m&aacute;s de <b>40 personas</b></div>
   </div>
 </section>
 
 <div class="sep"></div>
 
-<!-- ── ROL ─────────────────────────────────────────── -->
+<!-- ROL -->
 <section>
   <div class="wrap">
     <span class="tag sr">El rol</span>
     <h2 class="sr">Qu&eacute; vas a hacer <span class="hl">todos los d&iacute;as</span></h2>
     <p class="intro sr">No hay manual. Hay un sistema que funciona, clientes que pagan, y necesitamos a alguien que nos ayude a escalarlo.</p>
     <ul class="items">
-      <li class="sr"><span class="mk mk-amber">&rarr;</span>Armar automatizaciones con n8n que conecten APIs, formularios, CRMs y sistemas de email</li>
-      <li class="sr sr-d1"><span class="mk mk-amber">&rarr;</span>Construir landing pages, funnels y poner productos digitales en escena usando IA</li>
-      <li class="sr sr-d2"><span class="mk mk-amber">&rarr;</span>Ejecutar procesos de onboarding, setup y lanzamiento de principio a fin</li>
-      <li class="sr sr-d3"><span class="mk mk-amber">&rarr;</span>Detectar problemas y proponer soluciones posibles</li>
+      <li class="sr"><span class="mk mk-accent">&rarr;</span>Armar automatizaciones con n8n que conecten APIs, formularios, CRMs y sistemas de email</li>
+      <li class="sr sr-d1"><span class="mk mk-accent">&rarr;</span>Construir landing pages, funnels y poner productos digitales en escena usando IA</li>
+      <li class="sr sr-d2"><span class="mk mk-accent">&rarr;</span>Ejecutar procesos de onboarding, setup y lanzamiento de principio a fin</li>
+      <li class="sr sr-d3"><span class="mk mk-accent">&rarr;</span>Detectar problemas y proponer soluciones posibles</li>
     </ul>
     <div class="note sr">Stack: n8n &middot; GoHighLevel &middot; DigitalOcean &middot; ChatGPT &middot; Claude &middot; PostgreSQL &middot; y lo que haga falta</div>
   </div>
@@ -528,31 +214,7 @@
 
 <div class="sep"></div>
 
-<!-- ── PULL QUOTE ──────────────────────────────────── -->
-<div class="pull sr">
-  <q>No miramos tu CV. Miramos <span class="hl">qu&eacute; constru&iacute;ste</span> y c&oacute;mo pens&aacute;s.</q>
-</div>
-
-<div class="sep"></div>
-
-<!-- ── NO ES PARA VOS ─────────────────────────────── -->
-<section>
-  <div class="wrap">
-    <span class="tag sr">Filtro honesto</span>
-    <h2 class="sr">Esto <span style="color:var(--red)">no</span> es para vos si</h2>
-    <ul class="items">
-      <li class="sr"><span class="mk mk-red">&times;</span>Necesit&aacute;s que alguien te diga qu&eacute; hacer todos los d&iacute;as</li>
-      <li class="sr sr-d1"><span class="mk mk-red">&times;</span>No us&aacute;s IA o solo le pregunt&aacute;s cosas b&aacute;sicas</li>
-      <li class="sr sr-d2"><span class="mk mk-red">&times;</span>Busc&aacute;s un trabajo tranquilo con tareas repetitivas</li>
-      <li class="sr sr-d3"><span class="mk mk-red">&times;</span>Nunca hiciste nada por tu cuenta &mdash; ni un bot, ni una landing, nada</li>
-      <li class="sr sr-d4"><span class="mk mk-red">&times;</span>Los problemas te frustran en lugar de desafiarte a buscar nuevos conocimientos</li>
-    </ul>
-  </div>
-</section>
-
-<div class="sep"></div>
-
-<!-- ── SI ES PARA VOS ─────────────────────────────── -->
+<!-- [UX #2] SI ES PARA VOS — PRIMERO (aspiracional antes del filtro) -->
 <section>
   <div class="wrap">
     <span class="tag sr">Tu perfil</span>
@@ -569,27 +231,34 @@
 
 <div class="sep"></div>
 
-<!-- ── PROYECTO ────────────────────────────────────── -->
+<!-- [UX #2] NO ES PARA VOS — DESPUÉS (filtro) -->
 <section>
   <div class="wrap">
-    <span class="tag sr">El contexto</span>
-    <h2 class="sr">Con qui&eacute;n vas a <span class="hl">trabajar</span></h2>
+    <span class="tag sr">Filtro honesto</span>
+    <h2 class="sr">Esto <span style="color:var(--red)">no</span> es para vos si</h2>
+    <ul class="items">
+      <li class="sr"><span class="mk mk-red">&times;</span>Necesit&aacute;s que alguien te diga qu&eacute; hacer todos los d&iacute;as</li>
+      <li class="sr sr-d1"><span class="mk mk-red">&times;</span>No us&aacute;s IA o solo le pregunt&aacute;s cosas b&aacute;sicas</li>
+      <li class="sr sr-d2"><span class="mk mk-red">&times;</span>Busc&aacute;s un trabajo tranquilo con tareas repetitivas</li>
+      <li class="sr sr-d3"><span class="mk mk-red">&times;</span>Nunca hiciste nada por tu cuenta &mdash; ni un bot, ni una landing, nada</li>
+      <li class="sr sr-d4"><span class="mk mk-red">&times;</span>Los problemas te frustran en lugar de desafiarte a buscar nuevos conocimientos</li>
+    </ul>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- [UX #1] CONTEXTO + OFERTA COMBINADOS (menos scroll) -->
+<section>
+  <div class="wrap">
+    <span class="tag sr">El proyecto</span>
+    <h2 class="sr">Con qui&eacute;n vas a <span class="hl">trabajar</span> y qu&eacute; obten&eacute;s</h2>
     <p class="intro sr">Estamos construyendo un sistema que ayuda a empresas a implementar IA, automatizar procesos y escalar. Ya tiene clientes. Ya factura. Y est&aacute; creciendo.</p>
     <div class="chips sr">
       <span class="chip">n8n</span><span class="chip">GoHighLevel</span><span class="chip">DigitalOcean</span>
       <span class="chip">ChatGPT / Claude</span><span class="chip">Funnels</span><span class="chip">APIs REST</span>
       <span class="chip">Webhooks</span><span class="chip">PostgreSQL</span>
     </div>
-  </div>
-</section>
-
-<div class="sep"></div>
-
-<!-- ── OFERTA ──────────────────────────────────────── -->
-<section>
-  <div class="wrap">
-    <span class="tag sr">La oferta</span>
-    <h2 class="sr">Lo que <span class="hl">obten&eacute;s</span></h2>
     <div class="grid">
       <div class="card sr"><span class="card-ico">&#127760;</span><div class="card-t">100% remoto</div><div class="card-d">Desde donde quieras. Lo que importa son resultados, no horas.</div></div>
       <div class="card sr sr-d1"><span class="card-ico">&#9889;</span><div class="card-t">Aprendizaje real</div><div class="card-d">Tecnolog&iacute;a de punta desde el d&iacute;a uno. Nada de teor&iacute;a sin aplicaci&oacute;n.</div></div>
@@ -601,7 +270,7 @@
 
 <div class="sep"></div>
 
-<!-- ── PROCESO ─────────────────────────────────────── -->
+<!-- PROCESO -->
 <section>
   <div class="wrap">
     <span class="tag sr">C&oacute;mo funciona</span>
@@ -617,9 +286,14 @@
 
 <div class="sep"></div>
 
-<!-- ══════════════════════════════════════════════════
-     FORMULARIO
-══════════════════════════════════════════════════ -->
+<!-- [UX #1] PULL QUOTE — justo antes del form como empujón final -->
+<div class="pull sr">
+  <q>No miramos tu CV. Miramos <span class="hl">qu&eacute; constru&iacute;ste</span> y c&oacute;mo pens&aacute;s.</q>
+</div>
+
+<div class="sep"></div>
+
+<!-- ══════ FORMULARIO ══════ -->
 <div id="form-zone">
   <div class="form-w">
 
@@ -643,7 +317,7 @@
 
       <!-- STEP 1 -->
       <div class="fs on" data-s="1">
-        <div class="step-label">Paso 1 / 5 &mdash; Datos b&aacute;sicos</div>
+        <div class="step-label">Paso 1 / 5 &mdash; Datos b&aacute;sicos &middot; ~1 min</div>
         <div class="g2">
           <div class="fld"><label>Nombre *</label><input type="text" id="nombre" name="nombre" placeholder="Tu nombre y apellido" required /><div class="fld-msg" id="msg-nombre">Campo requerido</div></div>
           <div class="fld"><label>Edad</label><input type="number" id="edad" name="edad" placeholder="Ej: 24" min="15" max="60" /></div>
@@ -652,43 +326,46 @@
           <div class="fld"><label>Email *</label><input type="email" id="email" name="email" placeholder="tu@email.com" required /><div class="fld-msg" id="msg-email">Email inv&aacute;lido</div></div>
           <div class="fld"><label>WhatsApp</label><input type="text" id="whatsapp" name="whatsapp" placeholder="+54 9 11 1234 5678" /></div>
         </div>
-        <div class="fld"><label>Pais / Ciudad *</label><input type="text" id="pais" name="pais" placeholder="Ej: Buenos Aires, Argentina" required /><div class="fld-msg" id="msg-pais">Campo requerido</div></div>
+        <div class="fld"><label>Pa&iacute;s / Ciudad *</label><input type="text" id="pais" name="pais" placeholder="Ej: Buenos Aires, Argentina" required /><div class="fld-msg" id="msg-pais">Campo requerido</div></div>
         <div class="fnav"><button type="button" class="btn-back btn-hide">Anterior</button><button type="button" class="btn-fwd" onclick="go(1)">Siguiente</button></div>
       </div>
 
       <!-- STEP 2 -->
       <div class="fs" data-s="2">
-        <div class="step-label">Paso 2 / 5 &mdash; Tu contexto</div>
-        <div class="fld"><div class="q">&iquest;Us&aacute;s IA en tu d&iacute;a a d&iacute;a? &iquest;Para qu&eacute; exactamente? *</div><div class="ht">S&eacute; espec&iacute;fico. Qu&eacute; herramientas, qu&eacute; tareas, con qu&eacute; frecuencia.</div><textarea id="p1" name="p1" required placeholder="Uso ChatGPT todos los dias para..."></textarea><div class="fld-msg" id="msg-p1">M&iacute;nimo 50 caracteres</div></div>
-        <div class="fld"><div class="q">&iquest;Alguna vez constru&iacute;ste algo por tu cuenta con herramientas digitales o IA? *</div><div class="ht">Puede ser chico, incompleto o sin monetizar. Lo que importa es que lo hiciste.</div><textarea id="p2" name="p2" required placeholder="Arme un bot que..."></textarea><div class="fld-msg" id="msg-p2">M&iacute;nimo 50 caracteres</div></div>
-        <div class="fld"><div class="q">&iquest;Cu&aacute;l es tu formaci&oacute;n? Contanos c&oacute;mo aprendiste lo que sab&eacute;s. *</div><div class="ht">Universidad, cursos, autodidacta... cualquier camino vale.</div><textarea id="p3" name="p3" required placeholder="Estudie... y aprendi por mi cuenta..."></textarea><div class="fld-msg" id="msg-p3">M&iacute;nimo 30 caracteres</div></div>
+        <div class="step-label">Paso 2 / 5 &mdash; Tu contexto &middot; ~3 min</div>
+        <div class="fld"><div class="q">&iquest;Us&aacute;s IA en tu d&iacute;a a d&iacute;a? &iquest;Para qu&eacute; exactamente? *</div><div class="ht">S&eacute; espec&iacute;fico. Qu&eacute; herramientas, qu&eacute; tareas, con qu&eacute; frecuencia.</div><textarea id="p1" name="p1" data-min="50" required placeholder="Uso ChatGPT todos los dias para..."></textarea><div class="char-count" id="cc-p1">0 / 50</div><div class="fld-msg" id="msg-p1">M&iacute;nimo 50 caracteres</div></div>
+        <div class="fld"><div class="q">&iquest;Alguna vez constru&iacute;ste algo por tu cuenta con herramientas digitales o IA? *</div><div class="ht">Puede ser chico, incompleto o sin monetizar. Lo que importa es que lo hiciste.</div><textarea id="p2" name="p2" data-min="50" required placeholder="Arme un bot que..."></textarea><div class="char-count" id="cc-p2">0 / 50</div><div class="fld-msg" id="msg-p2">M&iacute;nimo 50 caracteres</div></div>
+        <div class="fld"><div class="q">&iquest;Cu&aacute;l es tu formaci&oacute;n? Contanos c&oacute;mo aprendiste lo que sab&eacute;s. *</div><div class="ht">Universidad, cursos, autodidacta... cualquier camino vale.</div><textarea id="p3" name="p3" data-min="30" required placeholder="Estudie... y aprendi por mi cuenta..."></textarea><div class="char-count" id="cc-p3">0 / 30</div><div class="fld-msg" id="msg-p3">M&iacute;nimo 30 caracteres</div></div>
         <div class="fnav"><button type="button" class="btn-back" onclick="go(-1)">Anterior</button><button type="button" class="btn-fwd" onclick="go(1)">Siguiente</button></div>
       </div>
 
       <!-- STEP 3 -->
       <div class="fs" data-s="3">
-        <div class="step-label">Paso 3 / 5 &mdash; Mentalidad</div>
-        <div class="fld"><div class="q">Te asignan algo que nunca hiciste y no hay nadie para explicarte. &iquest;Qu&eacute; hac&eacute;s? *</div><div class="ht">Tu proceso real, paso a paso.</div><textarea id="p4" name="p4" required placeholder="Lo primero que hago es..."></textarea><div class="fld-msg" id="msg-p4">M&iacute;nimo 50 caracteres</div></div>
-        <div class="fld"><div class="q">&iquest;Por qu&eacute; te interesa este rol? S&eacute; honesto. *</div><div class="ht">No buscamos la respuesta correcta. Buscamos la real.</div><textarea id="p5" name="p5" required placeholder="Me interesa porque..."></textarea><div class="fld-msg" id="msg-p5">M&iacute;nimo 50 caracteres</div></div>
-        <div class="fld"><div class="q">&iquest;Cu&aacute;l fue el &uacute;ltimo error que cometiste trabajando o aprendiendo? &iquest;C&oacute;mo lo resolviste? *</div><div class="ht">Todos nos equivocamos. Lo que importa es qu&eacute; hiciste despu&eacute;s.</div><textarea id="p6" name="p6" required placeholder="Me paso que..."></textarea><div class="fld-msg" id="msg-p6">M&iacute;nimo 50 caracteres</div></div>
+        <div class="step-label">Paso 3 / 5 &mdash; Mentalidad &middot; ~4 min</div>
+        <div class="fld"><div class="q">Te asignan algo que nunca hiciste y no hay nadie para explicarte. &iquest;Qu&eacute; hac&eacute;s? *</div><div class="ht">Tu proceso real, paso a paso.</div><textarea id="p4" name="p4" data-min="50" required placeholder="Lo primero que hago es..."></textarea><div class="char-count" id="cc-p4">0 / 50</div><div class="fld-msg" id="msg-p4">M&iacute;nimo 50 caracteres</div></div>
+        <div class="fld"><div class="q">&iquest;Por qu&eacute; te interesa este rol? S&eacute; honesto. *</div><div class="ht">No buscamos la respuesta correcta. Buscamos la real.</div><textarea id="p5" name="p5" data-min="50" required placeholder="Me interesa porque..."></textarea><div class="char-count" id="cc-p5">0 / 50</div><div class="fld-msg" id="msg-p5">M&iacute;nimo 50 caracteres</div></div>
+        <div class="fld"><div class="q">&iquest;Cu&aacute;l fue el &uacute;ltimo error que cometiste trabajando o aprendiendo? &iquest;C&oacute;mo lo resolviste? *</div><div class="ht">Todos nos equivocamos. Lo que importa es qu&eacute; hiciste despu&eacute;s.</div><textarea id="p6" name="p6" data-min="50" required placeholder="Me paso que..."></textarea><div class="char-count" id="cc-p6">0 / 50</div><div class="fld-msg" id="msg-p6">M&iacute;nimo 50 caracteres</div></div>
         <div class="fnav"><button type="button" class="btn-back" onclick="go(-1)">Anterior</button><button type="button" class="btn-fwd" onclick="go(1)">Siguiente</button></div>
       </div>
 
-      <!-- STEP 4 -->
+      <!-- STEP 4 — [UX #4] mensaje motivador -->
       <div class="fs" data-s="4">
-        <div class="step-label">Paso 4 / 5 &mdash; Prueba pr&aacute;ctica</div>
+        <div class="step-label">Paso 4 / 5 &mdash; Prueba pr&aacute;ctica &middot; ~8 min</div>
+        <div class="step-motivator">&#128170; &Uacute;ltimo esfuerzo &mdash; ac&aacute; es donde te destac&aacute;s</div>
         <div class="fld">
           <div class="q">Describ&iacute; paso a paso c&oacute;mo crear&iacute;as este sistema: *</div>
           <div class="ex-box"><p><strong>Desaf&iacute;o:</strong> Un sistema automatizado que tome un formulario de contacto, guarde los datos en una base de datos y env&iacute;e un email de bienvenida autom&aacute;tico.</p><p style="margin-top:8px">No necesit&aacute;s c&oacute;digo. Describ&iacute; el flujo con las herramientas que conozcas.</p></div>
           <div class="ht">Cuanto m&aacute;s detalle, mejor. Pod&eacute;s mencionar n8n, Zapier, Make, scripts, etc.</div>
-          <textarea id="p7" name="p7" class="lg" required placeholder="Primero configuraria... luego..."></textarea>
+          <textarea id="p7" name="p7" class="lg" data-min="80" required placeholder="Primero configuraria... luego..."></textarea>
+          <div class="char-count" id="cc-p7">0 / 80</div>
           <div class="fld-msg" id="msg-p7">M&iacute;nimo 80 caracteres</div>
         </div>
         <div class="fld">
           <div class="q">Us&aacute; ChatGPT o Claude para resolver esto. Peg&aacute; el prompt y el resultado: *</div>
           <div class="ex-box"><p><strong>Problema:</strong> Un cliente recibi&oacute; cobros dobles. Redact&aacute; un email que resuelva el problema, mantenga la relaci&oacute;n y ofrezca compensaci&oacute;n <em>sin prometer demasiado</em>.</p></div>
           <div class="ht">Copi&aacute; el prompt que usaste y el resultado. Si lo iteraste, mejor.</div>
-          <textarea id="p8" name="p8" class="lg" required placeholder="Prompt: ...\n\nResultado: ..."></textarea>
+          <textarea id="p8" name="p8" class="lg" data-min="100" required placeholder="Prompt: ...\n\nResultado: ..."></textarea>
+          <div class="char-count" id="cc-p8">0 / 100</div>
           <div class="fld-msg" id="msg-p8">M&iacute;nimo 100 caracteres</div>
         </div>
         <div class="fnav"><button type="button" class="btn-back" onclick="go(-1)">Anterior</button><button type="button" class="btn-fwd" onclick="go(1)">Siguiente</button></div>
@@ -696,11 +373,11 @@
 
       <!-- STEP 5 -->
       <div class="fs" data-s="5">
-        <div class="step-label">Paso 5 / 5 &mdash; Cierre</div>
-        <div class="fld"><div class="q">&iquest;Cu&aacute;ntas horas por semana pod&eacute;s dedicar? &iquest;Ten&eacute;s otros compromisos? *</div><textarea id="p9" name="p9" required placeholder="Puedo dedicar... horas. Actualmente..."></textarea><div class="fld-msg" id="msg-p9">Campo requerido</div></div>
+        <div class="step-label">Paso 5 / 5 &mdash; Cierre &middot; ~1 min</div>
+        <div class="fld"><div class="q">&iquest;Cu&aacute;ntas horas por semana pod&eacute;s dedicar? &iquest;Ten&eacute;s otros compromisos? *</div><textarea id="p9" name="p9" data-min="10" required placeholder="Puedo dedicar... horas. Actualmente..."></textarea><div class="char-count" id="cc-p9">0 / 10</div><div class="fld-msg" id="msg-p9">Campo requerido</div></div>
         <div class="fld"><div class="q">&iquest;Cu&aacute;l es tu remuneraci&oacute;n mensual pretendida para este puesto? (en USD) *</div><div class="ht">Pon&eacute; un n&uacute;mero aproximado en d&oacute;lares.</div><input type="number" id="sueldo" name="sueldo" placeholder="Ej: 800" min="1" required /><div class="fld-msg" id="msg-sueldo">Ingres&aacute; un monto</div></div>
         <div class="fld"><div class="q">&iquest;Algo m&aacute;s que quieras que sepamos? (opcional)</div><div class="ht">Si ten&eacute;s algo que te distingue, este es el lugar.</div><textarea id="p10" name="p10" placeholder="Quiero agregar que..."></textarea></div>
-        <div id="err-msg">Error al enviar. Intenta de nuevo.</div>
+        <div id="err-msg">Error al enviar. Intent&aacute; de nuevo.</div>
         <div class="fnav"><button type="button" class="btn-back" onclick="go(-1)">Anterior</button><button type="submit" class="btn-go" id="go-btn">Enviar aplicaci&oacute;n</button></div>
         <p class="submit-ft">Al enviar confirm&aacute;s que las respuestas son tuyas.</p>
       </div>
@@ -716,28 +393,87 @@
 
 <script>
 const WEBHOOK_URL='http://n8n-h9545em8h1see0ph3bk4suog.159.89.47.141.sslip.io/webhook/talent-apply';
+const STORAGE_KEY='synapticom_app_v1';
 
-// Scroll reveal
+// ── Scroll reveal ────────────────────────────────────
 const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('v');io.unobserve(e.target)}})},{threshold:.12,rootMargin:'0px 0px -30px 0px'});
 document.querySelectorAll('.sr').forEach(el=>io.observe(el));
 
-// Smooth links
+// ── Smooth links ─────────────────────────────────────
 document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'})}})});
 
-// Hide mobile CTA when form visible
+// ── [UX #9] Mobile CTA — only on mobile via CSS class ──
 const mobCta=document.getElementById('mob-cta');
 const formZone=document.getElementById('form-zone');
-const fio=new IntersectionObserver(es=>{es.forEach(e=>{mobCta.style.display=e.isIntersecting?'none':'block'})},{threshold:.1});
+const isMobile=()=>window.innerWidth<=640;
+const fio=new IntersectionObserver(es=>{es.forEach(e=>{
+  if(isMobile()){mobCta.classList.toggle('visible',!e.isIntersecting)}
+  else{mobCta.classList.remove('visible')}
+})},{threshold:.1});
 if(formZone&&mobCta)fio.observe(formZone);
 
-// Wizard
+// ── [UX #3] Character counters ───────────────────────
+document.querySelectorAll('textarea[data-min]').forEach(ta=>{
+  const min=parseInt(ta.dataset.min);
+  const cc=document.getElementById('cc-'+ta.id);
+  if(!cc)return;
+  ta.addEventListener('input',()=>{
+    const len=ta.value.trim().length;
+    cc.textContent=len+' / '+min;
+    cc.classList.toggle('ok',len>=min);
+  });
+});
+
+// ── [UX #6] Toast ────────────────────────────────────
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2000);
+}
+
+// ── [UX #7] localStorage save/restore ────────────────
+function saveProgress(){
+  const data={step:cur};
+  ['nombre','email','whatsapp','pais','edad','p1','p2','p3','p4','p5','p6','p7','p8','p9','sueldo','p10'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el)data[id]=el.value;
+  });
+  try{localStorage.setItem(STORAGE_KEY,JSON.stringify(data))}catch(e){}
+}
+function restoreProgress(){
+  try{
+    const raw=localStorage.getItem(STORAGE_KEY);
+    if(!raw)return;
+    const data=JSON.parse(raw);
+    ['nombre','email','whatsapp','pais','edad','p1','p2','p3','p4','p5','p6','p7','p8','p9','sueldo','p10'].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el&&data[id])el.value=data[id];
+    });
+    // Restore step
+    if(data.step&&data.step>1){
+      cur=data.step;
+      show(cur);
+      showToast('\u2705 Retomamos donde dejaste');
+    }
+    // Update char counters
+    document.querySelectorAll('textarea[data-min]').forEach(ta=>{
+      ta.dispatchEvent(new Event('input'));
+    });
+  }catch(e){}
+}
+
+// ── Wizard ───────────────────────────────────────────
 let cur=1;const tot=5;
+const stepNames=['','Datos b\u00e1sicos','Tu contexto','Mentalidad','Prueba pr\u00e1ctica','Cierre'];
+
 function show(n){
   document.querySelectorAll('.fs').forEach(s=>s.classList.remove('on'));
-  document.querySelector(`.fs[data-s="${n}"]`).classList.add('on');
+  document.querySelector('.fs[data-s="'+n+'"]').classList.add('on');
   document.querySelectorAll('.pill').forEach((p,i)=>{p.classList.remove('on','done');if(i+1===n)p.classList.add('on');else if(i+1<n)p.classList.add('done')});
   document.getElementById('apply').scrollIntoView({behavior:'smooth',block:'start'});
 }
+
 const vld={
   1:()=>{let o=true;o=vf('nombre',2)&&o;o=vf('pais',2)&&o;const e=document.getElementById('email'),k=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.value.trim());e.classList.toggle('fld-err',!k);document.getElementById('msg-email').style.display=k?'none':'block';return k&&o},
   2:()=>vf('p1',50)&vf('p2',50)&vf('p3',30)?true:false,
@@ -745,13 +481,18 @@ const vld={
   4:()=>vf('p7',80)&vf('p8',100)?true:false,
   5:()=>vf('p9',10)&vf('sueldo',1)?true:false
 };
+
 function vf(id,min){const el=document.getElementById(id),m=document.getElementById('msg-'+id),ok=(el?el.value.trim():'').length>=min;if(el)el.classList.toggle('fld-err',!ok);if(m)m.style.display=ok?'none':'block';return ok}
+
 function go(d){
   if(d>0&&!vld[cur]()){const e=document.querySelector('.fs.on .fld-err');if(e)e.scrollIntoView({behavior:'smooth',block:'center'});return}
-  cur=Math.max(1,Math.min(tot,cur+d));show(cur);
+  if(d>0){showToast('\u2705 '+stepNames[cur]+' completado')}
+  cur=Math.max(1,Math.min(tot,cur+d));
+  show(cur);
+  saveProgress();
 }
 
-// Submit
+// ── Submit ───────────────────────────────────────────
 document.getElementById('app-form').addEventListener('submit',async function(e){
   e.preventDefault();if(!vld[5]())return;
   const data={};['nombre','email','whatsapp','pais','edad','p1','p2','p3','p4','p5','p6','p7','p8','p9','sueldo','p10'].forEach(id=>{const el=document.getElementById(id);data[id]=el?el.value.trim():''});
@@ -763,9 +504,18 @@ document.getElementById('app-form').addEventListener('submit',async function(e){
     document.getElementById('pills').style.display='none';
     document.getElementById('ok-msg').style.display='block';
     document.getElementById('ok-msg').scrollIntoView({behavior:'smooth',block:'start'});
-    if(mobCta)mobCta.style.display='none';
+    if(mobCta)mobCta.classList.remove('visible');
+    try{localStorage.removeItem(STORAGE_KEY)}catch(e){}
   }catch(err){console.error(err);document.getElementById('err-msg').style.display='block';btn.disabled=false;btn.textContent='Enviar aplicaci\u00f3n'}
 });
+
+// ── Auto-save on input ───────────────────────────────
+document.querySelectorAll('#app-form input,#app-form textarea').forEach(el=>{
+  el.addEventListener('input',()=>{clearTimeout(el._st);el._st=setTimeout(saveProgress,500)});
+});
+
+// ── Restore on load ──────────────────────────────────
+restoreProgress();
 </script>
 </body>
 </html>
