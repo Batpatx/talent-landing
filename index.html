@@ -479,7 +479,7 @@ const vld={
   2:()=>vf('p1',50)&vf('p2',50)&vf('p3',30)?true:false,
   3:()=>vf('p4',50)&vf('p5',50)&vf('p6',50)?true:false,
   4:()=>vf('p7',80)&vf('p8',100)?true:false,
-  5:()=>vf('p9',10)&vf('sueldo',1)?true:false
+  5:()=>{const sv=document.getElementById('sueldo'),sv_ok=!!(sv&&parseInt(sv.value,10)>=1);if(sv){sv.classList.toggle('fld-err',!sv_ok);const sm=document.getElementById('msg-sueldo');if(sm)sm.style.display=sv_ok?'none':'block';}return !!(vf('p9',10)&sv_ok)}
 };
 
 function vf(id,min){const el=document.getElementById(id),m=document.getElementById('msg-'+id),ok=(el?el.value.trim():'').length>=min;if(el)el.classList.toggle('fld-err',!ok);if(m)m.style.display=ok?'none':'block';return ok}
