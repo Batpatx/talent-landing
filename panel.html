@@ -171,6 +171,8 @@
       <div id="m-answers"></div>
       <div class="section-title">Etapa &amp; Notas</div>
       <div class="stage-box">
+        <div class="stage-label">LinkedIn</div>
+        <input type="url" class="stage-notes" id="m-linkedin" placeholder="https://linkedin.com/in/perfil" style="min-height:auto;padding:10px 12px" />
         <div class="stage-label">Sueldo pretendido (USD/mes)</div>
         <input type="number" class="stage-notes" id="m-sueldo" placeholder="Ej: 800" min="1" style="min-height:auto;padding:10px 12px" />
         <div class="stage-label">Estado</div>
@@ -353,6 +355,7 @@ function openModal(uuid) {
     <span>${esc(c.email||'')}</span>
     ${c.whatsapp ? `<span>${esc(c.whatsapp)}</span>` : ''}
     ${c.pais ? `<span>${esc(c.pais)}</span>` : ''}
+    ${c.linkedin ? `<span><a href="${esc(c.linkedin)}" target="_blank" style="color:var(--accent)">LinkedIn</a></span>` : ''}
   `;
 
   // Pills
@@ -395,6 +398,7 @@ function openModal(uuid) {
     `<option value="${col.id}" ${(c.estado||'pendiente')===col.id?'selected':''}>${col.label}</option>`
   ).join('');
 
+  document.getElementById('m-linkedin').value = c.linkedin || '';
   document.getElementById('m-sueldo').value = c.sueldo || '';
   document.getElementById('m-notas').value = c.notas || '';
   document.getElementById('save-msg').style.display = 'none';
@@ -429,13 +433,14 @@ async function saveStage() {
 
   const estado = document.getElementById('m-estado').value;
   const notas  = document.getElementById('m-notas').value;
-  const sueldo = document.getElementById('m-sueldo').value || null;
+  const sueldo   = document.getElementById('m-sueldo').value || null;
+  const linkedin = document.getElementById('m-linkedin').value || null;
 
   try {
     const r = await fetch(API_POST, {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({uuid: currentCandidate.uuid, estado, notas, sueldo})
+      body: JSON.stringify({uuid: currentCandidate.uuid, estado, notas, sueldo, linkedin})
     });
     if (!r.ok) throw new Error(r.status);
 
@@ -445,10 +450,12 @@ async function saveStage() {
       allCandidates[idx].estado = estado;
       allCandidates[idx].notas  = notas;
       allCandidates[idx].sueldo = sueldo;
+      allCandidates[idx].linkedin = linkedin;
     }
     currentCandidate.estado = estado;
     currentCandidate.notas  = notas;
     currentCandidate.sueldo = sueldo;
+    currentCandidate.linkedin = linkedin;
 
     msg.style.display = 'inline';
     btn.textContent = 'Guardar cambios';
