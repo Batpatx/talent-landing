@@ -327,6 +327,7 @@
           <div class="fld"><label>WhatsApp</label><input type="text" id="whatsapp" name="whatsapp" placeholder="+54 9 11 1234 5678" /></div>
         </div>
         <div class="fld"><label>Pa&iacute;s / Ciudad *</label><input type="text" id="pais" name="pais" placeholder="Ej: Buenos Aires, Argentina" required /><div class="fld-msg" id="msg-pais">Campo requerido</div></div>
+        <div class="fld"><label>LinkedIn</label><input type="url" id="linkedin" name="linkedin" placeholder="https://linkedin.com/in/tu-perfil" /></div>
         <div class="fnav"><button type="button" class="btn-back btn-hide">Anterior</button><button type="button" class="btn-fwd" onclick="go(1)">Siguiente</button></div>
       </div>
 
@@ -435,7 +436,7 @@ function showToast(msg){
 // ── [UX #7] localStorage save/restore ────────────────
 function saveProgress(){
   const data={step:cur};
-  ['nombre','email','whatsapp','pais','edad','p1','p2','p3','p4','p5','p6','p7','p8','p9','sueldo','p10'].forEach(id=>{
+  ['nombre','email','whatsapp','pais','edad','linkedin','p1','p2','p3','p4','p5','p6','p7','p8','p9','sueldo','p10'].forEach(id=>{
     const el=document.getElementById(id);
     if(el)data[id]=el.value;
   });
@@ -446,7 +447,7 @@ function restoreProgress(){
     const raw=localStorage.getItem(STORAGE_KEY);
     if(!raw)return;
     const data=JSON.parse(raw);
-    ['nombre','email','whatsapp','pais','edad','p1','p2','p3','p4','p5','p6','p7','p8','p9','sueldo','p10'].forEach(id=>{
+    ['nombre','email','whatsapp','pais','edad','linkedin','p1','p2','p3','p4','p5','p6','p7','p8','p9','sueldo','p10'].forEach(id=>{
       const el=document.getElementById(id);
       if(el&&data[id])el.value=data[id];
     });
@@ -495,7 +496,7 @@ function go(d){
 // ── Submit ───────────────────────────────────────────
 document.getElementById('app-form').addEventListener('submit',async function(e){
   e.preventDefault();if(!vld[5]())return;
-  const data={};['nombre','email','whatsapp','pais','edad','p1','p2','p3','p4','p5','p6','p7','p8','p9','sueldo','p10'].forEach(id=>{const el=document.getElementById(id);data[id]=el?el.value.trim():''});
+  const data={};['nombre','email','whatsapp','pais','edad','linkedin','p1','p2','p3','p4','p5','p6','p7','p8','p9','sueldo','p10'].forEach(id=>{const el=document.getElementById(id);data[id]=el?el.value.trim():''});
   const btn=document.getElementById('go-btn');btn.disabled=true;btn.textContent='Enviando...';document.getElementById('err-msg').style.display='none';
   try{
     const r=await fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
