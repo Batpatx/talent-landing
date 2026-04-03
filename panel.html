@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SYNAPTICOM &mdash; Panel de Candidatos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:#0a0c10;--surface:#111318;--card:#171a21;--border:#1f2530;--border-l:#2a3340;
+      --accent:#0099FF;--accent-l:#33bbff;--accent-d:#0077cc;
+      --text:#e8ecf2;--sub:#b0b8c4;--muted:#717d8a;--dim:#454f5c;
+      --red:#e5534b;--green:#3fb950;--yellow:#e3b341;--orange:#f0883e;
+      --font-d:'Bricolage Grotesque',serif;--font-b:'Plus Jakarta Sans',sans-serif;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{height:100%;-webkit-text-size-adjust:100%}
+    body{background:var(--bg);color:var(--text);font-family:var(--font-b);font-size:14px;line-height:1.5;height:100%;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased}
+    a{color:var(--accent)}
+    button{cursor:pointer;font-family:var(--font-b)}
+    input,textarea,select{font-family:var(--font-b);font-size:14px}
+
+    /* ─── LOGIN ─────────────────────────────────────────────── */
+    #login-screen{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:1000}
+    .login-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:40px 36px;width:360px;text-align:center}
+    .login-logo{font-family:var(--font-d);font-weight:800;font-size:20px;color:var(--text);letter-spacing:-.5px;margin-bottom:6px}
+    .login-logo em{font-style:normal;color:var(--accent)}
+    .login-sub{color:var(--muted);font-size:13px;margin-bottom:28px}
+    .login-box input[type=password]{width:100%;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 14px;color:var(--text);outline:none;margin-bottom:12px;transition:border-color .2s}
+    .login-box input[type=password]:focus{border-color:var(--accent)}
+    .login-btn{width:100%;background:var(--accent);color:#fff;font-weight:700;font-size:14px;border:none;border-radius:8px;padding:12px;transition:background .2s}
+    .login-btn:hover{background:var(--accent-d)}
+    .login-err{color:var(--red);font-size:13px;margin-top:10px;display:none}
+
+    /* ─── HEADER ────────────────────────────────────────────── */
+    header{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;gap:20px;flex-shrink:0}
+    .h-logo{font-family:var(--font-d);font-weight:800;font-size:17px;color:var(--text);letter-spacing:-.4px;white-space:nowrap}
+    .h-logo em{font-style:normal;color:var(--accent)}
+    .h-title{font-size:13px;color:var(--muted);white-space:nowrap}
+    .h-stats{display:flex;gap:12px;margin-left:auto;flex-wrap:wrap}
+    .stat-pill{background:var(--card);border:1px solid var(--border);border-radius:100px;padding:5px 14px;font-size:12px;font-weight:600;white-space:nowrap}
+    .stat-pill span{color:var(--accent);margin-left:5px;font-weight:800}
+    .h-refresh{background:none;border:1px solid var(--border);color:var(--sub);font-size:12px;padding:6px 14px;border-radius:100px;transition:all .2s;margin-left:8px}
+    .h-refresh:hover{border-color:var(--accent);color:var(--accent)}
+
+    /* ─── KANBAN ─────────────────────────────────────────────── */
+    #main{flex:1;overflow:hidden;display:flex;flex-direction:column}
+    #board{display:flex;gap:14px;padding:20px 24px;overflow-x:auto;flex:1;align-items:flex-start}
+    #board::-webkit-scrollbar{height:6px}
+    #board::-webkit-scrollbar-track{background:transparent}
+    #board::-webkit-scrollbar-thumb{background:var(--border-l);border-radius:3px}
+
+    .col{background:var(--surface);border:1px solid var(--border);border-radius:12px;width:260px;min-width:260px;display:flex;flex-direction:column;max-height:calc(100vh - 130px)}
+    .col-header{padding:14px 16px 10px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-shrink:0}
+    .col-name{font-weight:700;font-size:13px;color:var(--text)}
+    .col-count{background:var(--card);border:1px solid var(--border);border-radius:100px;padding:2px 8px;font-size:11px;font-weight:700;color:var(--muted);margin-left:auto}
+    .col-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+    .col-cards{padding:10px;display:flex;flex-direction:column;gap:8px;overflow-y:auto;flex:1}
+    .col-cards::-webkit-scrollbar{width:3px}
+    .col-cards::-webkit-scrollbar-thumb{background:var(--border-l);border-radius:2px}
+    .col-empty{color:var(--dim);font-size:12px;text-align:center;padding:20px 10px}
+
+    /* ─── CARD ───────────────────────────────────────────────── */
+    .card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 14px;cursor:pointer;transition:border-color .2s,box-shadow .2s;user-select:none}
+    .card:hover{border-color:var(--border-l);box-shadow:0 2px 12px rgba(0,0,0,.3)}
+    .card-top{display:flex;align-items:flex-start;gap:8px;margin-bottom:8px}
+    .card-name{font-weight:700;font-size:13px;color:var(--text);flex:1;line-height:1.3}
+    .badge-class{font-size:10px;font-weight:800;letter-spacing:.5px;padding:3px 7px;border-radius:5px;white-space:nowrap;flex-shrink:0}
+    .badge-EXCELENTE{background:rgba(0,153,255,.15);color:#0099FF}
+    .badge-BUENO{background:rgba(63,185,80,.15);color:#3fb950}
+    .badge-MEDIO{background:rgba(227,179,65,.15);color:#e3b341}
+    .badge-DESCARTE{background:rgba(229,83,75,.12);color:#e5534b}
+    .card-score{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+    .score-num{font-family:var(--font-d);font-weight:800;font-size:16px;color:var(--accent)}
+    .score-bar-wrap{flex:1;height:4px;background:var(--border);border-radius:2px}
+    .score-bar{height:4px;background:var(--accent);border-radius:2px}
+    .card-meta{display:flex;flex-direction:column;gap:3px}
+    .card-row{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:5px}
+    .card-row b{color:var(--sub)}
+    .card-fecha{font-size:11px;color:var(--dim);margin-top:6px;text-align:right}
+
+    /* ─── MODAL ──────────────────────────────────────────────── */
+    #modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;display:none;align-items:flex-start;justify-content:center;padding:24px 16px;overflow-y:auto}
+    #modal-bg.open{display:flex}
+    #modal{background:var(--surface);border:1px solid var(--border);border-radius:16px;width:100%;max-width:660px;flex-shrink:0}
+    .modal-header{padding:24px 28px 20px;border-bottom:1px solid var(--border)}
+    .modal-name{font-family:var(--font-d);font-size:22px;font-weight:800;color:var(--text);margin-bottom:4px}
+    .modal-sub{color:var(--muted);font-size:13px;display:flex;gap:14px;flex-wrap:wrap}
+    .modal-body{padding:24px 28px}
+    .m-row{display:flex;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+    .m-pill{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 14px;font-size:13px}
+    .m-pill label{display:block;color:var(--muted);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;margin-bottom:2px}
+    .m-pill b{color:var(--text);font-size:15px}
+    .m-score-big{background:var(--accent);color:#fff;font-family:var(--font-d);font-weight:800;font-size:24px;padding:8px 18px;border-radius:8px;display:inline-block}
+    .section-title{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:20px 0 10px}
+    .bars-grid{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+    .br{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--sub)}
+    .bn{width:110px;flex-shrink:0;font-size:12px}
+    .bt{flex:1;height:5px;background:var(--border);border-radius:3px}
+    .bf{height:5px;background:var(--accent);border-radius:3px;transition:width .4s ease}
+    .bv{width:40px;text-align:right;color:var(--muted);font-size:11px;flex-shrink:0}
+    .accordion{border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:4px}
+    .acc-head{background:var(--card);padding:12px 16px;cursor:pointer;font-weight:600;font-size:13px;display:flex;justify-content:space-between;align-items:center;user-select:none}
+    .acc-head:hover{background:rgba(255,255,255,.03)}
+    .acc-arrow{transition:transform .2s;color:var(--muted);font-size:10px}
+    .acc-body{display:none;padding:14px 16px;font-size:13px;color:var(--sub);line-height:1.7;white-space:pre-wrap;word-break:break-word;background:var(--bg);border-top:1px solid var(--border)}
+    .acc-body.open{display:block}
+    .stage-box{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;margin-top:4px}
+    .stage-label{font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+    .stage-select{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);outline:none;margin-bottom:12px;-webkit-appearance:none;appearance:none}
+    .stage-select:focus{border-color:var(--accent)}
+    .stage-notes{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);outline:none;resize:vertical;min-height:72px;margin-bottom:12px}
+    .stage-notes:focus{border-color:var(--accent)}
+    .btn-save{background:var(--accent);color:#fff;font-weight:700;font-size:14px;border:none;border-radius:8px;padding:11px 24px;transition:background .2s}
+    .btn-save:hover{background:var(--accent-d)}
+    .btn-save:disabled{opacity:.5;cursor:default}
+    .btn-close{background:none;border:1px solid var(--border);color:var(--sub);font-size:13px;padding:10px 20px;border-radius:8px;transition:all .2s}
+    .btn-close:hover{border-color:var(--border-l);color:var(--text)}
+    .modal-footer{padding:16px 28px 24px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border)}
+    .save-msg{font-size:12px;color:var(--green);display:none}
+    #loading{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:900;flex-direction:column;gap:14px}
+    .spin{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .load-txt{color:var(--muted);font-size:13px}
+  </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">SYNAP<em>TI</em>COM</div>
+    <div class="login-sub">Panel de Candidatos &mdash; Acceso Interno</div>
+    <input type="password" id="pw-input" placeholder="Contrase&ntilde;a" />
+    <button class="login-btn" onclick="checkPw()">Entrar</button>
+    <div class="login-err" id="pw-err">Contrase&ntilde;a incorrecta</div>
+  </div>
+</div>
+
+<!-- LOADING -->
+<div id="loading" style="display:none">
+  <div class="spin"></div>
+  <div class="load-txt">Cargando candidatos...</div>
+</div>
+
+<!-- MAIN PANEL -->
+<div id="main" style="display:none">
+  <header>
+    <div class="h-logo">SYNAP<em>TI</em>COM</div>
+    <div class="h-title">Panel de Candidatos</div>
+    <div class="h-stats" id="stats-bar"></div>
+    <button class="h-refresh" onclick="loadCandidates()">&#8635; Actualizar</button>
+  </header>
+  <div id="board"></div>
+</div>
+
+<!-- MODAL -->
+<div id="modal-bg" onclick="closeModalBg(event)">
+  <div id="modal">
+    <div class="modal-header">
+      <div id="m-name" class="modal-name"></div>
+      <div id="m-sub" class="modal-sub"></div>
+    </div>
+    <div class="modal-body">
+      <div class="m-row" id="m-pills"></div>
+      <div class="section-title">Breakdown de Score</div>
+      <div class="bars-grid" id="m-bars"></div>
+      <div class="section-title">Respuestas</div>
+      <div id="m-answers"></div>
+      <div class="section-title">Etapa &amp; Notas</div>
+      <div class="stage-box">
+        <div class="stage-label">Estado</div>
+        <select class="stage-select" id="m-estado"></select>
+        <div class="stage-label">Notas internas</div>
+        <textarea class="stage-notes" id="m-notas" placeholder="Observaciones, pr&oacute;ximos pasos..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-close" onclick="closeModal()">Cerrar</button>
+      <div style="display:flex;align-items:center;gap:14px">
+        <span class="save-msg" id="save-msg">Guardado &#10003;</span>
+        <button class="btn-save" id="btn-save" onclick="saveStage()">Guardar cambios</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Config ────────────────────────────────────────────────────────
+const API_GET   = '/panel-api/talent-candidates';
+const API_POST  = '/panel-api/talent-update-stage';
+const PW_HASH   = '3273bd1241c3613ecdfec875387f118a16d4e58455494ffc3390088690d70828'; // Synap2025
+
+const COLUMNS = [
+  {id:'pendiente',    label:'Pendiente',    dot:'#717d8a'},
+  {id:'en_revision',  label:'En Revisi\u00f3n', dot:'#e3b341'},
+  {id:'contactado',   label:'Contactado',   dot:'#0099FF'},
+  {id:'entrevistado', label:'Entrevistado', dot:'#f0883e'},
+  {id:'contratado',   label:'Contratado',   dot:'#3fb950'},
+  {id:'rechazado',    label:'Rechazado',    dot:'#e5534b'},
+];
+
+const ANSWERS = [
+  {id:'p1', q:'Uso de IA en el d\u00eda a d\u00eda'},
+  {id:'p2', q:'Proyectos propios construidos'},
+  {id:'p3', q:'Formaci\u00f3n y aprendizaje'},
+  {id:'p4', q:'Mentalidad ante problemas nuevos'},
+  {id:'p5', q:'Por qu\u00e9 este rol'},
+  {id:'p6', q:'\u00daltimo error y c\u00f3mo lo resolvi\u00f3'},
+  {id:'p7', q:'Ejercicio t\u00e9cnico (flujo autom\u00e1tico)'},
+  {id:'p8', q:'Ejercicio con IA (email cliente)'},
+  {id:'p9', q:'Disponibilidad horaria'},
+  {id:'p10',q:'Informaci\u00f3n adicional'},
+];
+
+const BREAKDOWN_LABELS = {
+  p1_uso_ia:'Uso IA', p2_proyectos:'Proyectos', p3_aprendizaje:'Aprendizaje',
+  p4_mentalidad:'Mentalidad', p5_motivacion:'Motivaci\u00f3n', p6_resiliencia:'Resiliencia',
+  p7_tecnico:'T\u00e9cnico', p8_ia_ejercicio:'Ejercicio IA', p10_logros:'Logros'
+};
+const BREAKDOWN_MAX = {
+  p1_uso_ia:10, p2_proyectos:10, p3_aprendizaje:7, p4_mentalidad:10,
+  p5_motivacion:10, p6_resiliencia:10, p7_tecnico:20, p8_ia_ejercicio:20, p10_logros:5
+};
+
+let allCandidates = [];
+let currentCandidate = null;
+
+// ── SHA-256 via SubtleCrypto ──────────────────────────────────────
+async function sha256(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+// ── Auth ──────────────────────────────────────────────────────────
+async function checkPw() {
+  const val = document.getElementById('pw-input').value;
+  const h = await sha256(val);
+  if (h === PW_HASH) {
+    sessionStorage.setItem('panel_auth','1');
+    document.getElementById('login-screen').style.display = 'none';
+    showApp();
+  } else {
+    document.getElementById('pw-err').style.display = 'block';
+    document.getElementById('pw-input').value = '';
+    document.getElementById('pw-input').focus();
+  }
+}
+
+document.getElementById('pw-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') checkPw();
+});
+
+function showApp() {
+  document.getElementById('loading').style.display = 'flex';
+  document.getElementById('main').style.display = 'flex';
+  loadCandidates();
+}
+
+// ── Load Candidates ───────────────────────────────────────────────
+async function loadCandidates() {
+  try {
+    const r = await fetch(API_GET);
+    if (!r.ok) throw new Error(r.status);
+    allCandidates = await r.json();
+    renderAll();
+  } catch(e) {
+    alert('Error al cargar candidatos: ' + e.message);
+  } finally {
+    document.getElementById('loading').style.display = 'none';
+  }
+}
+
+// ── Render ────────────────────────────────────────────────────────
+function renderAll() {
+  renderStats();
+  renderBoard();
+}
+
+function renderStats() {
+  const total = allCandidates.length;
+  const byClass = {EXCELENTE:0, BUENO:0, MEDIO:0, DESCARTE:0};
+  allCandidates.forEach(c => { byClass[c.classification] = (byClass[c.classification]||0)+1; });
+  const bar = document.getElementById('stats-bar');
+  bar.innerHTML = `
+    <div class="stat-pill">Total<span>${total}</span></div>
+    <div class="stat-pill" style="color:#0099FF">EXC<span style="color:#0099FF">${byClass.EXCELENTE}</span></div>
+    <div class="stat-pill" style="color:#3fb950">BUENOS<span style="color:#3fb950">${byClass.BUENO}</span></div>
+    <div class="stat-pill" style="color:#e3b341">MEDIO<span style="color:#e3b341">${byClass.MEDIO}</span></div>
+    <div class="stat-pill" style="color:#e5534b">DESC<span style="color:#e5534b">${byClass.DESCARTE}</span></div>
+  `;
+}
+
+function renderBoard() {
+  const board = document.getElementById('board');
+  board.innerHTML = '';
+  COLUMNS.forEach(col => {
+    const cards = allCandidates.filter(c => (c.estado||'pendiente') === col.id);
+    const el = document.createElement('div');
+    el.className = 'col';
+    el.innerHTML = `
+      <div class="col-header">
+        <div class="col-dot" style="background:${col.dot}"></div>
+        <div class="col-name">${col.label}</div>
+        <div class="col-count">${cards.length}</div>
+      </div>
+      <div class="col-cards" id="col-${col.id}">
+        ${cards.length === 0 ? '<div class="col-empty">Sin candidatos</div>' : cards.map(renderCard).join('')}
+      </div>
+    `;
+    board.appendChild(el);
+  });
+}
+
+function renderCard(c) {
+  const fecha = c.created_at ? new Date(c.created_at).toLocaleDateString('es-AR',{day:'2-digit',month:'short'}) : '';
+  const scoreW = Math.min(100, c.score || 0);
+  return `
+    <div class="card" onclick="openModal('${c.uuid}')">
+      <div class="card-top">
+        <div class="card-name">${esc(c.nombre||'Sin nombre')}</div>
+        <div class="badge-class badge-${c.classification}">${c.classification}</div>
+      </div>
+      <div class="card-score">
+        <div class="score-num">${c.score}</div>
+        <div class="score-bar-wrap"><div class="score-bar" style="width:${scoreW}%"></div></div>
+      </div>
+      <div class="card-meta">
+        ${c.pais ? `<div class="card-row">\uD83D\uDCCD ${esc(c.pais)}</div>` : ''}
+        ${c.sueldo ? `<div class="card-row">\uD83D\uDCB5 USD ${esc(c.sueldo)}/mes</div>` : ''}
+      </div>
+      <div class="card-fecha">${fecha}</div>
+    </div>
+  `;
+}
+
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Modal ─────────────────────────────────────────────────────────
+function openModal(uuid) {
+  const c = allCandidates.find(x => x.uuid === uuid);
+  if (!c) return;
+  currentCandidate = c;
+
+  document.getElementById('m-name').textContent = c.nombre || 'Sin nombre';
+  document.getElementById('m-sub').innerHTML = `
+    <span>${esc(c.email||'')}</span>
+    ${c.whatsapp ? `<span>${esc(c.whatsapp)}</span>` : ''}
+    ${c.pais ? `<span>${esc(c.pais)}</span>` : ''}
+  `;
+
+  // Pills
+  document.getElementById('m-pills').innerHTML = `
+    <div class="m-pill"><label>Score</label><b class="m-score-big">${c.score}/100</b></div>
+    <div class="m-pill"><label>Clasificaci&oacute;n</label><b class="badge-class badge-${c.classification}" style="font-size:13px">${c.classification}</b></div>
+    ${c.edad ? `<div class="m-pill"><label>Edad</label><b>${esc(c.edad)} a&ntilde;os</b></div>` : ''}
+    ${c.sueldo ? `<div class="m-pill"><label>Sueldo pretendido</label><b>USD ${esc(c.sueldo)}/mes</b></div>` : ''}
+  `;
+
+  // Breakdown bars
+  const bd = c.breakdown || {};
+  document.getElementById('m-bars').innerHTML = Object.keys(BREAKDOWN_LABELS).map(k => {
+    const val = bd[k] ?? 0;
+    const max = BREAKDOWN_MAX[k] || 10;
+    const pct = Math.min(100, Math.round((val/max)*100));
+    return `<div class="br">
+      <span class="bn">${BREAKDOWN_LABELS[k]}</span>
+      <div class="bt"><div class="bf" style="width:${pct}%"></div></div>
+      <span class="bv">${val}/${max}</span>
+    </div>`;
+  }).join('');
+
+  // Answers accordion
+  document.getElementById('m-answers').innerHTML = ANSWERS.map(a => {
+    const txt = c[a.id] || '';
+    if (!txt.trim()) return '';
+    return `<div class="accordion" style="margin-bottom:6px">
+      <div class="acc-head" onclick="toggleAcc(this)">
+        <span>${a.q}</span>
+        <span class="acc-arrow">&#9660;</span>
+      </div>
+      <div class="acc-body">${esc(txt)}</div>
+    </div>`;
+  }).join('');
+
+  // Estado select
+  const sel = document.getElementById('m-estado');
+  sel.innerHTML = COLUMNS.map(col =>
+    `<option value="${col.id}" ${(c.estado||'pendiente')===col.id?'selected':''}>${col.label}</option>`
+  ).join('');
+
+  document.getElementById('m-notas').value = c.notas || '';
+  document.getElementById('save-msg').style.display = 'none';
+  document.getElementById('btn-save').disabled = false;
+
+  document.getElementById('modal-bg').classList.add('open');
+}
+
+function toggleAcc(head) {
+  const body = head.nextElementSibling;
+  const arrow = head.querySelector('.acc-arrow');
+  body.classList.toggle('open');
+  arrow.style.transform = body.classList.contains('open') ? 'rotate(180deg)' : '';
+}
+
+function closeModal() {
+  document.getElementById('modal-bg').classList.remove('open');
+  currentCandidate = null;
+}
+
+function closeModalBg(e) {
+  if (e.target === document.getElementById('modal-bg')) closeModal();
+}
+
+// ── Save Stage ────────────────────────────────────────────────────
+async function saveStage() {
+  if (!currentCandidate) return;
+  const btn = document.getElementById('btn-save');
+  const msg = document.getElementById('save-msg');
+  btn.disabled = true;
+  btn.textContent = 'Guardando...';
+
+  const estado = document.getElementById('m-estado').value;
+  const notas  = document.getElementById('m-notas').value;
+
+  try {
+    const r = await fetch(API_POST, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({uuid: currentCandidate.uuid, estado, notas})
+    });
+    if (!r.ok) throw new Error(r.status);
+
+    // Update local state
+    const idx = allCandidates.findIndex(x => x.uuid === currentCandidate.uuid);
+    if (idx >= 0) {
+      allCandidates[idx].estado = estado;
+      allCandidates[idx].notas  = notas;
+    }
+    currentCandidate.estado = estado;
+    currentCandidate.notas  = notas;
+
+    msg.style.display = 'inline';
+    btn.textContent = 'Guardar cambios';
+    btn.disabled = false;
+    renderBoard();
+
+    setTimeout(() => { msg.style.display = 'none'; }, 3000);
+  } catch(e) {
+    alert('Error al guardar: ' + e.message);
+    btn.textContent = 'Guardar cambios';
+    btn.disabled = false;
+  }
+}
+
+// ── Init ──────────────────────────────────────────────────────────
+if (sessionStorage.getItem('panel_auth') === '1') {
+  document.getElementById('login-screen').style.display = 'none';
+  showApp();
+} else {
+  setTimeout(() => document.getElementById('pw-input').focus(), 100);
+}
+</script>
+</body>
+</html>
