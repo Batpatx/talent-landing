@@ -171,6 +171,8 @@
       <div id="m-answers"></div>
       <div class="section-title">Etapa &amp; Notas</div>
       <div class="stage-box">
+        <div class="stage-label">Sueldo pretendido (USD/mes)</div>
+        <input type="number" class="stage-notes" id="m-sueldo" placeholder="Ej: 800" min="1" style="min-height:auto;padding:10px 12px" />
         <div class="stage-label">Estado</div>
         <select class="stage-select" id="m-estado"></select>
         <div class="stage-label">Notas internas</div>
@@ -393,6 +395,7 @@ function openModal(uuid) {
     `<option value="${col.id}" ${(c.estado||'pendiente')===col.id?'selected':''}>${col.label}</option>`
   ).join('');
 
+  document.getElementById('m-sueldo').value = c.sueldo || '';
   document.getElementById('m-notas').value = c.notas || '';
   document.getElementById('save-msg').style.display = 'none';
   document.getElementById('btn-save').disabled = false;
@@ -426,12 +429,13 @@ async function saveStage() {
 
   const estado = document.getElementById('m-estado').value;
   const notas  = document.getElementById('m-notas').value;
+  const sueldo = document.getElementById('m-sueldo').value || null;
 
   try {
     const r = await fetch(API_POST, {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({uuid: currentCandidate.uuid, estado, notas})
+      body: JSON.stringify({uuid: currentCandidate.uuid, estado, notas, sueldo})
     });
     if (!r.ok) throw new Error(r.status);
 
@@ -440,9 +444,11 @@ async function saveStage() {
     if (idx >= 0) {
       allCandidates[idx].estado = estado;
       allCandidates[idx].notas  = notas;
+      allCandidates[idx].sueldo = sueldo;
     }
     currentCandidate.estado = estado;
     currentCandidate.notas  = notas;
+    currentCandidate.sueldo = sueldo;
 
     msg.style.display = 'inline';
     btn.textContent = 'Guardar cambios';
